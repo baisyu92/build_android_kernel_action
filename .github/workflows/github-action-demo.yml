@@ -43,4 +43,4 @@ jobs:
             mkdir gcc
             wget https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/+archive/0a0604336d4d1067aa1aaef8d3779b31fcee841d.tar.gz
             tar -zxvf 0a0604336d4d1067aa1aaef8d3779b31fcee841d.tar.gz -C gcc
-            git clone -b ${{ input.branch }} ${{ input.url }} kernel
+            git clone --depth=1 -b ${{ input.branch }} ${{ input.url }} kernel
