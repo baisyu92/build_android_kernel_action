@@ -1,18 +1,46 @@
-name: GitHub Actions Demo
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-on: [push]
+name: Build Android Kernel
+on:
+    workflow_dispatch:
+        input:
+            url:
+                description: 'Repositories URL'
+                required: true
+                default: 'https://github.com/baisyu92/android_kernel_xiaomi_vayu.git'
+                type: string
+            branch:
+                description: 'Branch'
+                required: true
+                default: 'clo'
+                type: string
+            defconfig:
+                description: 'Device defconfig'
+                required: true
+                default: 'vayu_user_defconfig'
+                type: string
+            llvm:
+                description: 'Clang version'
+                required: true
+                default: 'r450784e'
+                type: string
+
 jobs:
-  Explore-GitHub-Actions:
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-      - name: Check out repository code
-        uses: actions/checkout@v3
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: List files in the repository
-        run: |
-          ls ${{ github.workspace }}
-      - run: echo "🍏 This job's status is ${{ job.status }}."
+    build:
+        runs-on: ubuntu-latest
+        steps:
+        - uses: actions/checkout@v3
+        - name: Setup Environment
+          run: |
+            sudo apt update -y && sudo apt upgrade -y
+            sudo apt install git ccache automake flex lzop bison gperf build-essential zip curl zlib1g-dev g++-multilib libxml2-utils bzip2 libbz2-dev libbz2-1.0 libghc-bzlib-dev squashfs-tools pngcrush schedtool dpkg-dev liblz4-tool make optipng maven libssl-dev pwgen libswitch-perl policycoreutils minicom libxml-sax-base-perl libxml-simple-perl bc libc6-dev-i386 lib32ncurses5-dev libx11-dev lib32z-dev libgl1-mesa-dev xsltproc unzip device-tree-compiler python2 python3
+            mkdir -p $GITHUB_WORKSPACE/build
+        
+        - name: Download Release
+          run: |
+            cd $GITHUB_WORKSPACE/build
+            mkdir clang
+            wget https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/master/clang-${{ input.llvm }}.tar.gz
+            tar -zxvf clang-${{ input.llvm }} -C clang
+            mkdir gcc
+            wget https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/+archive/0a0604336d4d1067aa1aaef8d3779b31fcee841d.tar.gz
+            tar -zxvf 0a0604336d4d1067aa1aaef8d3779b31fcee841d.tar.gz -C gcc
+            git clone -b ${{ input.branch }} ${{ input.url }} kernel
