@@ -3,25 +3,21 @@ on:
     workflow_dispatch:
         input:
             url:
-                description: 'Repositories URL'
+                description: 'Repository URL'
                 required: true
                 default: 'https://github.com/baisyu92/android_kernel_xiaomi_vayu.git'
-                type: string
             branch:
                 description: 'Branch'
                 required: true
                 default: 'clo'
-                type: string
             defconfig:
                 description: 'Device defconfig'
                 required: true
                 default: 'vayu_user_defconfig'
-                type: string
             llvm:
                 description: 'Clang version'
                 required: true
                 default: 'r450784e'
-                type: string
 
 jobs:
     build:
@@ -44,3 +40,5 @@ jobs:
             wget https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/+archive/0a0604336d4d1067aa1aaef8d3779b31fcee841d.tar.gz
             tar -zxvf 0a0604336d4d1067aa1aaef8d3779b31fcee841d.tar.gz -C gcc
             git clone --depth=1 -b ${{ input.branch }} ${{ input.url }} kernel
+
+        
