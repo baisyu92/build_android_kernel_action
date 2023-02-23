@@ -39,7 +39,7 @@ jobs:
             cd build
             mkdir clang
             wget https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/master/clang-${{ inputs.llvm }}.tar.gz
-            tar -zxvf clang-${{ inputs.llvm }} -C clang
+            tar -zxvf clang-${{ inputs.llvm }}.tar.gz -C clang
             mkdir gcc
             wget https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/+archive/0a0604336d4d1067aa1aaef8d3779b31fcee841d.tar.gz
             tar -zxvf 0a0604336d4d1067aa1aaef8d3779b31fcee841d.tar.gz -C gcc
