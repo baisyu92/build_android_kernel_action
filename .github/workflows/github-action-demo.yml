@@ -38,15 +38,15 @@ jobs:
           run: |
             cd $GITHUB_WORKSPACE/build
             mkdir clang
-            wget https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/master/clang-${{ input.llvm }}.tar.gz
-            tar -zxvf clang-${{ input.llvm }} -C clang
+            wget https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/master/clang-${{ inputs.llvm }}.tar.gz
+            tar -zxvf clang-${{ inputs.llvm }} -C clang
             mkdir gcc
             wget https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/+archive/0a0604336d4d1067aa1aaef8d3779b31fcee841d.tar.gz
             tar -zxvf 0a0604336d4d1067aa1aaef8d3779b31fcee841d.tar.gz -C gcc
-            git clone --depth=1 -b ${{ input.branch }} ${{ input.url }} kernel
+            git clone --depth=1 -b ${{ inputs.branch }} ${{ inputs.url }} kernel
             
         - name: Build Kernel
           run: |
-            make 0=out ARCH=arm64 ${{ input.defconfig }}
+            make 0=out ARCH=arm64 ${{ inputs.defconfig }}
             PATH=/$GITHUB_WORKSPACE/build/clang/bin:/$GITHUB_WORKSPACE/build/gcc/bin:${PATH}
             make -j$(nproc --all) 0=out ARCH=arm64 CC=clang LD=ld.lld CLANG_TRIPLE=aarch64-linux-gnu- CROSS_COMPILE=aarch64-linux-android-
