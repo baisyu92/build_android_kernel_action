@@ -1,26 +1,26 @@
 name: Build Android Kernel
 on: 
- workflow_dispatch: 
-  input: 
-   url: 
-    description: 'Repository URL'
-    required: true
-    type: string
-   branch: 
-    description: 'Branch'
-    required: true
-    type: string
-   defconfig: 
-    description: 'Device defconfig'
-    required: true
-    type: string
-   llvm: 
-    description: 'Clang version'
-    required: true
-    type: string
+    workflow_dispatch:
+        input:
+            url:
+                description: 'Repository URL'
+                required: true
+                type: string
+            branch:
+                description: 'Branch'
+                required: true
+                type: string
+            defconfig:
+                description: 'Device defconfig'
+                required: true
+                type: string
+            llvm:
+                description: 'Clang version'
+                required: true
+                type: string
 
 jobs:
-    url:
+    build:
         runs-on: ubuntu-latest
         steps:
         - uses: actions/checkout@v3
