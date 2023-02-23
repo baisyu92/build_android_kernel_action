@@ -1,7 +1,7 @@
 name: Build Android Kernel
 on: 
     workflow_dispatch:
-        input:
+        inputs:
             url:
                 description: 'Repository URL'
                 required: true
@@ -18,15 +18,6 @@ on:
                 description: 'Clang version'
                 required: true
                 type: string
-            logLevel:
-                description: 'Log level'
-                required: true
-                default: 'warning' 
-                type: choice
-                options:
-                - info
-                - warning
-                - debug
                 
 jobs:
     build:
