@@ -6,18 +6,22 @@ on:
                 description: 'Repository URL'
                 required: true
                 default: 'https://github.com/baisyu92/android_kernel_xiaomi_vayu.git'
+                type: string
             branch:
                 description: 'Branch'
                 required: true
                 default: 'clo'
+                type: string
             defconfig:
                 description: 'Device defconfig'
                 required: true
                 default: 'vayu_user_defconfig'
+                type: string
             llvm:
                 description: 'Clang version'
                 required: true
                 default: 'r450784e'
+                type: string
 
 jobs:
     build:
