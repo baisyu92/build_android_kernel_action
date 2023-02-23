@@ -1,27 +1,27 @@
 name: Build Android Kernel
-on:
-    workflow_dispatch:
-        input:
-            url:
-                description: 'Repository URL'
-                required: true
-                default: 'https://github.com/baisyu92/android_kernel_xiaomi_vayu.git'
-                type: string
-            branch:
-                description: 'Branch'
-                required: true
-                default: 'clo'
-                type: string
-            defconfig:
-                description: 'Device defconfig'
-                required: true
-                default: 'vayu_user_defconfig'
-                type: string
-            llvm:
-                description: 'Clang version'
-                required: true
-                default: 'r450784e'
-                type: string
+on: 
+ workflow_dispatch: 
+  input: 
+   url: 
+    description: 'Repository URL'
+    required: true
+    default: 'https://github.com/baisyu92/android_kernel_xiaomi_vayu.git'
+    type: string
+   branch: 
+    description: 'Branch'
+    required: true
+    default: 'clo'
+    type: string
+   defconfig: 
+    description: 'Device defconfig'
+    required: true
+    default: 'vayu_user_defconfig'
+    type: string
+   llvm: 
+    description: 'Clang version'
+    required: true
+    default: 'r450784e'
+    type: string
 
 jobs:
     build:
@@ -33,6 +33,7 @@ jobs:
             sudo apt update -y && sudo apt upgrade -y
             sudo apt install git ccache automake flex lzop bison gperf build-essential zip curl zlib1g-dev g++-multilib libxml2-utils bzip2 libbz2-dev libbz2-1.0 libghc-bzlib-dev squashfs-tools pngcrush schedtool dpkg-dev liblz4-tool make optipng maven libssl-dev pwgen libswitch-perl policycoreutils minicom libxml-sax-base-perl libxml-simple-perl bc libc6-dev-i386 lib32ncurses5-dev libx11-dev lib32z-dev libgl1-mesa-dev xsltproc unzip device-tree-compiler python2 python3
             mkdir -p $GITHUB_WORKSPACE/build
+            echo
         
         - name: Download Release
           run: |
