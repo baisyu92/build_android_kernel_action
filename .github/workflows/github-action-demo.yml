@@ -22,6 +22,7 @@ on:
 jobs:
     build:
         runs-on: ubuntu-latest
+        env: ${{ input.llvm }}
         steps:
         - uses: actions/checkout@v3
         - name: Setup Environment
