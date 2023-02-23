@@ -48,6 +48,7 @@ jobs:
         - name: Build Kernel
           run: |
             cd build && cd kernel
+            make clean && make mrproper
             make 0=out ARCH=arm64 ${{ inputs.defconfig }}
-            PATH=/build/clang/bin:/build/gcc/bin:${PATH}
+            export PATH=/build/clang/bin:/build/gcc/bin:${PATH}
             make -j$(nproc --all) 0=out ARCH=arm64 CC=clang LD=ld.lld CLANG_TRIPLE=aarch64-linux-gnu- CROSS_COMPILE=aarch64-linux-android-
