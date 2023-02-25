@@ -52,21 +52,4 @@ jobs:
             make 0=out ARCH=arm64 ${{ inputs.defconfig }}
             PATH=$GITHUB_WORKSPACE/build/clang/bin:$GITHUB_WORKSPACE/build/gcc/bin:${PATH}
             make -j$(nproc --all) 0=out ARCH=arm64 CC=clang LD=ld.lld CLANG_TRIPLE=aarch64-linux-gnu- CROSS_COMPILE=aarch64-linux-android-
-
-        - name: Anykernel3
-          run: |
-            cd build
-            git clone --depth=1 https://github.com/osm0sis/AnyKernel3
-            sed -i 's/do.devicecheck=1/do.devicecheck=0/g' AnyKernel3/anykernel.sh
-            sed -i 's!block=/dev/block/platform/omap/omap_hsmmc.0/by-name/boot;!block=auto;!g' AnyKernel3/anykernel.sh
-            sed -i 's/is_slot_device=0;/is_slot_device=auto;/g' AnyKernel3/anykernel.sh
-            cp kernel/arch/arm64/boot/Image AnyKernel3/
-            cp kernel/arch/arm64/boot/dtbo.img AnyKernel3/
-            cd AnyKernel3
-            
-        - name: Upload
-        - uses: actions/upload-artifact@v3
-          with:
-            name: UPDATE-AnyKernel3.zip
-            path: /build/AnyKernel3/*
             
