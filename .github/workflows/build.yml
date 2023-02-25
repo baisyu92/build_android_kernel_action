@@ -1,0 +1,54 @@
+name: Build Android Kernel
+on: 
+    workflow_dispatch:
+        inputs:
+            url:
+                description: 'Repository URL'
+                required: true
+                default: 'https://github.com/baisyu92/android_kernel_xiaomi_vayu.git'
+                type: string
+            branch:
+                description: 'Branch'
+                required: true
+                default: 'clo'
+                type: string
+            defconfig:
+                description: 'Device defconfig'
+                required: true
+                default: 'vayu_user_defconfig'
+                type: string
+            llvm:
+                description: 'Clang version'
+                required: true
+                default: 'r450784e'
+                type: string
+                
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        steps:
+        - uses: actions/checkout@v3
+        - name: Setup Environment
+          run: |
+            sudo apt update
+            sudo apt install git ccache automake flex lzop bison gperf build-essential zip curl zlib1g-dev g++-multilib libxml2-utils bzip2 libbz2-dev libbz2-1.0 libghc-bzlib-dev squashfs-tools pngcrush schedtool dpkg-dev liblz4-tool make optipng maven libssl-dev pwgen libswitch-perl policycoreutils minicom libxml-sax-base-perl libxml-simple-perl bc libc6-dev-i386 lib32ncurses5-dev libx11-dev lib32z-dev libgl1-mesa-dev xsltproc unzip device-tree-compiler python2 python3
+            mkdir build
+
+        - name: Download Release
+          run: |
+            cd build
+            mkdir clang
+            wget https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/master/clang-${{ inputs.llvm }}.tar.gz
+            tar -zxvf clang-${{ inputs.llvm }}.tar.gz -C clang
+            mkdir gcc
+            wget https://android.googlesource.com/platform/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/+archive/0a0604336d4d1067aa1aaef8d3779b31fcee841d.tar.gz
+            tar -zxvf 0a0604336d4d1067aa1aaef8d3779b31fcee841d.tar.gz -C gcc
+            git clone --depth=1 -b ${{ inputs.branch }} ${{ inputs.url }} kernel
+            
+        - name: Build Kernel
+          run: |
+            cd build && cd kernel
+            make clean && make mrproper
+            make 0=out ARCH=arm64 ${{ inputs.defconfig }}
+            export PATH=/home/../build/clang/bin:/home/../build/gcc/bin:${PATH}
+            make -j$(nproc --all) 0=out ARCH=arm64 CC=clang LD=ld.lld CLANG_TRIPLE=aarch64-linux-gnu- CROSS_COMPILE=aarch64-linux-android-
