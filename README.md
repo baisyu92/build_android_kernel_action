@@ -4,6 +4,7 @@
 3. 找到`Build Android Kernel`並點下去
 4. 找到`Run workflow`
 5. 修改內容後點底下的`Run workflow`  
+> 只支援64Bit，32Bit該消失了
 
 # 說明
 ### Repository URL  
